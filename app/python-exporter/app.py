@@ -76,6 +76,8 @@ def predict(instances: dict = Body(...)):
         return {"predictions": preds}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+    
 @app.post("/retrain")
 def retrain():
     retrain_count_total.inc()
