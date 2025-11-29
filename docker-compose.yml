@@ -1,5 +1,16 @@
 version: '3.7'
 services:
+  app:
+    build: 
+      context: ./app/python-exporter
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8000:8000"
+    environment:
+      - RETRAIN_TOKEN=${RETRAIN_TOKEN:-}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
