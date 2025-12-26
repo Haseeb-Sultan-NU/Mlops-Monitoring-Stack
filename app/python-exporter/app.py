@@ -45,7 +45,7 @@ def measure_response_time(func):
         start = time.time()
         result = func(*args, **kwargs)
         elapsed = time.time() - start
-        response_delay_seconds.observe(elapsed)
+        response_delay_seconds.set(elapsed)
         return result
     return wrapper
 
