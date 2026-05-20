@@ -1,15 +1,17 @@
 version: '3.7'
 services:
-  app:
+  ml-model-app:
     build: 
       context: ./app/python-exporter
       dockerfile: Dockerfile
-    container_name: app
+    container_name: ml-model-app
     ports:
       - "8000:8000"
     environment:
       - RETRAIN_TOKEN=${RETRAIN_TOKEN:-}
       - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+    networks:
+      - monitor-net
 
   prometheus:
     image: prom/prometheus:latest
@@ -46,7 +48,7 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
     ports:
-      - "3000:3000"
+      - "3001:3000"
     networks:
       - monitor-net
 
@@ -60,14 +62,6 @@ services:
       - "9100:9100"
     command:
       - "--path.rootfs=/host"
-
-  python-app:
-    build: ./app/python-exporter
-    container_name: python-app
-    ports:
-      - "8000:8000"
-    networks:
-      - monitor-net
 
   blackbox:
     image: prom/blackbox-exporter:latest

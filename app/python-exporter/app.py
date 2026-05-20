@@ -45,7 +45,7 @@ def measure_response_time(func):
         start = time.time()
         result = func(*args, **kwargs)
         elapsed = time.time() - start
-        response_delay_seconds.observe(elapsed)
+        response_delay_seconds.set(elapsed)
         return result
     return wrapper
 
@@ -76,6 +76,8 @@ def predict(instances: dict = Body(...)):
         return {"predictions": preds}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+    
 @app.post("/retrain")
 def retrain():
     retrain_count_total.inc()
